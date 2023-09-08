@@ -1,113 +1,200 @@
+'use client'
+import { Box, Button, Container, Flex, Heading, Input, Text } from '@chakra-ui/react'
 import Image from 'next/image'
+// import vid from '../public/video.mp4'
+import frame from '../public/frame.png'
+import { useEffect, useRef, useState } from 'react'
+
+function isValidEmail(email) {
+  const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return regex.test(email);
+}
 
 export default function Home() {
+  const vidRef = useRef()
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const isValid = isValidEmail(email)
+
+  const [sent, setSent] = useState(false)
+
+  const handleSend = async () => {
+    if (sent) {
+      return;
+    }
+
+    if (loading || !isValid) {
+      return;
+    }
+
+    setLoading(true)
+    const googleScriptURL = 'https://script.google.com/macros/s/AKfycbwhJ24M74852k9HZXztnOeUAYL4UZ-opDKnsFTUFGXYCCH3O7T5DnLDD1AUW-xj0GSi/exec';
+    fetch(googleScriptURL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `email=${email}`
+    })
+      .then(response => {
+        console.log('Email saved successfully:', response);
+        setLoading(false)
+        setSent(true)
+      })
+      .catch(error => {
+        console.error('Error saving email:', error);
+        alert('Oops! Something went wrong. Please try again.');
+        setLoading(false)
+      });
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Flex
+      backgroundColor={'#0F0F0F'}
+      minH={'100vh'}
+    >
+      <Container
+        maxW={'1600px'}
+        py={4}
+        display={'flex'}
+        flexDirection={'column'}
+        px={[0, 4]}
+      >
+
+        <Flex
+          flex={1}
+          flexDirection={['column', 'row']}
+
+        >
+          <Flex
+            my={[8, 32]}
+            flex={1}
+            flexDirection={'column'}
+            justifyContent={['start', 'center']}
+            gap={[8, 8]}
+            mr={[0, 8]}
+            px={[4, 0]}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+            <Heading
+              textAlign={['center', 'left']}
+              fontSize={['6xl', '8xl']}
+            >sachet tv</Heading>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
+            <Box mt={[8, 0]} />
+
+            <Heading
+              fontSize={['3xl', '5xl']}
+            >
+              no music! no editing!
+              <br />
+              just capturing and sharing,
+              <br />
+              in real-time.
+            </Heading>
+
+            <Text
+              fontSize={['xl', '3xl']}
+            >
+              sachet tv lets you capture and share real-time events with 1 minute short live videos
+            </Text>
+
+            <Flex>
+              <Input
+                placeholder='Enter your email'
+                _placeholder={{
+                  color: '#d9cece'
+                }}
+                color={'#ffffff'}
+                w={'80'}
+
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
+              <Button
+                // backgroundColor={'#ffffff'}
+                colorScheme='white'
+                _disabled={{
+                  background: '#ffffff',
+                  cursor: 'not-allowed'
+                }}
+                bg={'#ffffff'}
+                variant={'solid'}
+                color={'#000000'}
+                ml={[2, 4]}
+                px={[6, 12]}
+                onClick={handleSend}
+                isDisabled={!isValid || loading}
+                opacity={sent ? 0.7 : 1}
+              >
+                {sent ? 'Sent' : 'Sign Up'}
+              </Button>
+            </Flex>
+
+            <Box mt={[12, 0]} />
+          </Flex>
+
+          <Flex
+            flex={1}
+            flexDirection={'column'}
+            justifyContent={'center'}
+            position={'relative'}
+            background={['white', 'transparent']}
+            py={[12, 0]}
+          >
+            {/* <iframe allowfullscreen="" frameborder="1" height="472.5" src="https://www.loom.com/embed/03a4262346a64ab3a497be2b8e75b408?sid=f9a1967d-ee53-4bbb-8b1f-214eac11fefd?hide_owner=true&hide_share=true&hide_title=true&hideEmbedTopBar=true" width="840"></iframe> */}
+
+            <Box
+              position={'relative'}
+            >
+              <Image
+                src={frame}
+                style={{
+                  objectFit: 'contain',
+                  // maxHeight: 'calc(100vh - 356px)'
+                  maxHeight: '100%',
+                  position: 'absolute',
+                  zIndex: 12,
+                  pointerEvents: 'none'
+                }}
+              />
+              <Box
+                height='100%'
+                width='100%'
+                display='flex'
+                justifyContent='center'
+                padding='24px'
+                top={0}
+              >
+                <video
+                  src={'./video.mp4'}
+                  style={{
+                    height: '100%',
+                    borderRadius: '10px'
+                  }}
+                  ref={vidRef}
+                  muted
+                  autoPlay
+                  controls
+                />
+              </Box>
+
+            </Box>
+
+          </Flex>
+
+        </Flex>
+
+        <Flex
+          justifyContent={'center'}
+          mt={[8, 0]}
         >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <Text>
+            © 2023 sachet tv. all rights reserved.
+          </Text>
+        </Flex>
+      </Container>
+    </Flex>
   )
 }
