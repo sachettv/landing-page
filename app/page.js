@@ -87,7 +87,7 @@ export default function Home() {
             <Heading
               fontSize={['3xl', '5xl']}
             >
-              no music! no editing!
+              no filters! no editing!
               <br />
               just capturing and sharing,
               <br />
