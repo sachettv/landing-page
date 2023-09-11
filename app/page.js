@@ -97,7 +97,7 @@ export default function Home() {
             <Text
               fontSize={['xl', '3xl']}
             >
-              sachet tv lets you capture and share real-time events with 1 minute short live videos
+              sachet tv lets you capture and share real-time events with 1 minute short live streams.
             </Text>
 
             <Flex>
@@ -168,7 +168,7 @@ export default function Home() {
                 top={0}
               >
                 <video
-                  src={'./video.mp4'}
+                  src={'./video1.mp4'}
                   style={{
                     height: '100%',
                     borderRadius: '10px'
