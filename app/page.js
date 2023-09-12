@@ -87,7 +87,7 @@ export default function Home() {
             <Heading
               fontSize={['3xl', '5xl']}
             >
-              no filters! no editing!
+              no music! no editing!
               <br />
               just capturing and sharing,
               <br />
@@ -168,7 +168,7 @@ export default function Home() {
                 top={0}
               >
                 <video
-                  src={'./video1.mp4'}
+                  src={'./video.mp4'}
                   style={{
                     height: '100%',
                     borderRadius: '10px'
